@@ -1085,23 +1085,85 @@
     let entries = [];
     let isSelectionMode = false;
     let selectedIds = new Set();
+    const SEED_VERSION_KEY = 'spectacle_data_seeded_29_v1';
+
+    // LES 29 ENTRÉES DE LA FEUILLE MANUSCRITE
+    const INITIAL_REGISTRY_ENTRIES = [
+      // Lignes 1 à 3 : Bracket Groupe (1 CB, 2 CB, 3 ESP)
+      { id: 'seed_1', num: 1, time: '19:40', name: 'Groupe (1/3)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_1', groupName: 'Groupe' },
+      { id: 'seed_2', num: 2, time: '19:42', name: 'Groupe (2/3)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_1', groupName: 'Groupe' },
+      { id: 'seed_3', num: 3, time: '19:43', name: 'Groupe (3/3)', paymentType: 'ESP', isPaid: true, amount: 15, groupId: 'grp_seed_1', groupName: 'Groupe' },
+
+      // Lignes 4 à 7 : Individuels Espèces
+      { id: 'seed_4', num: 4, time: '19:45', name: 'Personne', paymentType: 'ESP', isPaid: true, amount: 15, groupId: null, groupName: null },
+      { id: 'seed_5', num: 5, time: '19:46', name: 'Personne', paymentType: 'ESP', isPaid: true, amount: 15, groupId: null, groupName: null },
+      { id: 'seed_6', num: 6, time: '19:47', name: 'Personne', paymentType: 'ESP', isPaid: true, amount: 15, groupId: null, groupName: null },
+      { id: 'seed_7', num: 7, time: '19:48', name: 'Personne', paymentType: 'ESP', isPaid: true, amount: 15, groupId: null, groupName: null },
+
+      // Lignes 8 à 11 : Groupe 4 pers CB
+      { id: 'seed_8', num: 8, time: '19:50', name: 'Groupe (1/4)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_8', groupName: 'Groupe' },
+      { id: 'seed_9', num: 9, time: '19:50', name: 'Groupe (2/4)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_8', groupName: 'Groupe' },
+      { id: 'seed_10', num: 10, time: '19:51', name: 'Groupe (3/4)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_8', groupName: 'Groupe' },
+      { id: 'seed_11', num: 11, time: '19:51', name: 'Groupe (4/4)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_8', groupName: 'Groupe' },
+
+      // Lignes 12 à 13 : Groupe 2 pers CB
+      { id: 'seed_12', num: 12, time: '19:53', name: 'Groupe (1/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_12', groupName: 'Groupe' },
+      { id: 'seed_13', num: 13, time: '19:53', name: 'Groupe (2/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_12', groupName: 'Groupe' },
+
+      // Lignes 14 à 15 : Groupe 2 pers CB
+      { id: 'seed_14', num: 14, time: '19:55', name: 'Groupe (1/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_14', groupName: 'Groupe' },
+      { id: 'seed_15', num: 15, time: '19:55', name: 'Groupe (2/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_14', groupName: 'Groupe' },
+
+      // Ligne 16 : Individuel Espèces
+      { id: 'seed_16', num: 16, time: '19:57', name: 'Personne', paymentType: 'ESP', isPaid: true, amount: 15, groupId: null, groupName: null },
+
+      // Lignes 17 à 18 : Groupe 2 pers CB
+      { id: 'seed_17', num: 17, time: '19:58', name: 'Groupe (1/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_17', groupName: 'Groupe' },
+      { id: 'seed_18', num: 18, time: '19:58', name: 'Groupe (2/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_17', groupName: 'Groupe' },
+
+      // Lignes 19 à 20 : Avec KARIM (2 pers CB)
+      { id: 'seed_19', num: 19, time: '20:00', name: 'Avec KARIM (1/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_karim', groupName: 'Avec KARIM' },
+      { id: 'seed_20', num: 20, time: '20:00', name: 'Avec KARIM (2/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_karim', groupName: 'Avec KARIM' },
+
+      // Lignes 21 à 23 : Groupe 3 pers CB
+      { id: 'seed_21', num: 21, time: '20:03', name: 'Groupe (1/3)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_21', groupName: 'Groupe' },
+      { id: 'seed_22', num: 22, time: '20:03', name: 'Groupe (2/3)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_21', groupName: 'Groupe' },
+      { id: 'seed_23', num: 23, time: '20:04', name: 'Groupe (3/3)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_21', groupName: 'Groupe' },
+
+      // Lignes 24 à 25 : Group 2 pers CB
+      { id: 'seed_24', num: 24, time: '20:06', name: 'Group (1/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_24', groupName: 'Group' },
+      { id: 'seed_25', num: 25, time: '20:06', name: 'Group (2/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_24', groupName: 'Group' },
+
+      // Lignes 26 à 27 : Groupe G 2 pers CB
+      { id: 'seed_26', num: 26, time: '20:09', name: 'Groupe G (1/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_26', groupName: 'Groupe G' },
+      { id: 'seed_27', num: 27, time: '20:09', name: 'Groupe G (2/2)', paymentType: 'CB', isPaid: true, amount: 15, groupId: 'grp_seed_26', groupName: 'Groupe G' },
+
+      // Lignes 28 à 29 : Groupe G 2 pers ESPÈCES
+      { id: 'seed_28', num: 28, time: '20:12', name: 'Groupe G (1/2)', paymentType: 'ESP', isPaid: true, amount: 15, groupId: 'grp_seed_28', groupName: 'Groupe G' },
+      { id: 'seed_29', num: 29, time: '20:12', name: 'Groupe G (2/2)', paymentType: 'ESP', isPaid: true, amount: 15, groupId: 'grp_seed_28', groupName: 'Groupe G' }
+    ];
 
     initApp();
 
     function initApp() {
       try {
+        const seeded = localStorage.getItem(SEED_VERSION_KEY);
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
+
+        if (!seeded) {
+          // Premier chargement avec la base réelle des 29 clients
+          entries = JSON.parse(JSON.stringify(INITIAL_REGISTRY_ENTRIES));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+          localStorage.setItem(BACKUP_KEY, JSON.stringify(entries));
+          localStorage.setItem(SEED_VERSION_KEY, 'true');
+        } else if (raw) {
           entries = JSON.parse(raw);
         } else {
-          const backup = localStorage.getItem(BACKUP_KEY);
-          if (backup) {
-            entries = JSON.parse(backup);
-          }
+          entries = JSON.parse(JSON.stringify(INITIAL_REGISTRY_ENTRIES));
         }
       } catch (err) {
         console.error("Erreur lecture storage", err);
-        entries = [];
+        entries = JSON.parse(JSON.stringify(INITIAL_REGISTRY_ENTRIES));
       }
 
       updateAllUI();
