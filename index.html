@@ -18,6 +18,7 @@
       --card-border: #222d42;
       --card-border-light: #2d3b55;
       --primary: #6366f1;
+      --primary-hover: #4f46e5;
       --cb: #0284c7;
       --cb-hover: #0369a1;
       --cb-glow: rgba(2, 132, 199, 0.25);
@@ -27,6 +28,8 @@
       --danger: #ef4444;
       --danger-hover: #dc2626;
       --danger-glow: rgba(239, 68, 68, 0.25);
+      --group-color: #8b5cf6;
+      --group-bg: rgba(139, 92, 246, 0.15);
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
@@ -46,7 +49,7 @@
       background-color: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 10px 12px calc(80px + var(--safe-bottom)) 12px;
+      padding: 10px 12px calc(90px + var(--safe-bottom)) 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -358,162 +361,7 @@
       border-color: var(--primary);
     }
 
-    /* Onglet 2: Création de Groupes */
-    .group-panel {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .group-header {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .stepper-label {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* Sélecteur de personnes pour groupe */
-    .stepper-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #0c121d;
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 8px 12px;
-    }
-
-    .stepper-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background: var(--card-bg-elevated);
-      border: 1px solid var(--card-border-light);
-      color: #fff;
-      font-size: 1.4rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .stepper-btn:active {
-      transform: scale(0.92);
-      background: #28354f;
-    }
-
-    .stepper-display {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .stepper-count {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 2rem;
-      font-weight: 800;
-      color: #38bdf8;
-      line-height: 1;
-    }
-
-    .stepper-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-top: 4px;
-    }
-
-    .quick-pill-row {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
-    .pill-btn {
-      background: #141c2c;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 7px 12px;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .pill-btn.active, .pill-btn:active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
-
-    .group-total-recap {
-      background: linear-gradient(135deg, #182338, #0e1624);
-      border: 1px solid #293856;
-      border-radius: 10px;
-      padding: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .group-total-text {
-      font-size: 0.85rem;
-      color: #cbd5e1;
-    }
-
-    .group-total-amount {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #10b981;
-    }
-
-    .group-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .btn-group-submit {
-      padding: 14px;
-      border-radius: 12px;
-      border: none;
-      font-weight: 800;
-      font-size: 0.95rem;
-      color: #fff;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-    }
-
-    .btn-group-submit:active {
-      transform: scale(0.97);
-    }
-
-    .btn-group-cb { background: linear-gradient(135deg, #0284c7, #0369a1); }
-    .btn-group-esp { background: linear-gradient(135deg, #10b981, #059669); }
-    .btn-group-unpaid { background: #334155; grid-column: span 2; }
-
-    /* Onglet 3: Liste / Registre */
+    /* Onglet 2: Vue Liste & Création Groupe depuis la liste */
     .list-panel {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -528,9 +376,41 @@
       background: #151d2d;
       border-bottom: 1px solid var(--card-border);
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .list-header-top {
+      display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
+    }
+
+    .btn-create-group-mode {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      border: 1px solid #a78bfa;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 8px 14px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(139, 92, 246, 0.35);
+      transition: all 0.15s ease;
+    }
+
+    .btn-create-group-mode:active {
+      transform: scale(0.96);
+    }
+
+    .btn-create-group-mode.active-mode {
+      background: #dc2626;
+      border-color: #ef4444;
+      box-shadow: 0 2px 10px rgba(239, 68, 68, 0.35);
     }
 
     .search-input {
@@ -542,6 +422,29 @@
       font-size: 0.82rem;
       width: 140px;
       outline: none;
+    }
+
+    /* Bandeau d'information du mode sélection */
+    .selection-banner {
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px dashed #8b5cf6;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      color: #c4b5fd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .selection-banner button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.78rem;
+      text-decoration: underline;
+      cursor: pointer;
     }
 
     .entries-container {
@@ -556,13 +459,24 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 11px 12px;
+      padding: 12px 12px;
       border-bottom: 1px solid #192233;
       gap: 8px;
+      transition: background 0.12s ease;
+      cursor: pointer;
     }
 
     .entry-row:last-child {
       border-bottom: none;
+    }
+
+    .entry-row.selected {
+      background: rgba(139, 92, 246, 0.18) !important;
+      border-left: 4px solid #8b5cf6;
+    }
+
+    .entry-row.is-group-member {
+      background: rgba(139, 92, 246, 0.05);
     }
 
     .entry-left {
@@ -570,6 +484,33 @@
       align-items: center;
       gap: 10px;
       min-width: 0;
+      flex: 1;
+    }
+
+    /* Checkbox tactile pour la sélection de groupe */
+    .group-checkbox {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      border: 2px solid #475569;
+      background: #0b101a;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .selection-active .group-checkbox {
+      display: flex;
+    }
+
+    .entry-row.selected .group-checkbox {
+      background: #8b5cf6;
+      border-color: #8b5cf6;
     }
 
     .entry-num {
@@ -589,7 +530,7 @@
     }
 
     .entry-name {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: #f1f5f9;
       white-space: nowrap;
@@ -602,7 +543,19 @@
       color: var(--text-dim);
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 6px;
+      margin-top: 2px;
+    }
+
+    .badge-group-tag {
+      background: var(--group-bg);
+      color: #c4b5fd;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.7rem;
     }
 
     .entry-right {
@@ -662,7 +615,111 @@
       color: var(--danger);
     }
 
-    /* Onglet 4: Export & Partage */
+    /* BARRE FLOTTANTE DE CONFIRMATION DE GROUPE (FIXÉE EN BAS DU MOBILE) */
+    .floating-group-bar {
+      position: fixed;
+      bottom: calc(10px + var(--safe-bottom));
+      left: 12px;
+      right: 12px;
+      max-width: 580px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #1e1b4b, #0f172a);
+      border: 2px solid #8b5cf6;
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(139, 92, 246, 0.3);
+      z-index: 1000;
+      animation: slideUp 0.25s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .floating-group-bar.active {
+      display: flex;
+    }
+
+    .floating-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .floating-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .floating-badge {
+      background: #8b5cf6;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .floating-inputs-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-group-name {
+      flex: 1;
+      background: #090e17;
+      border: 1px solid #4338ca;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 10px 12px;
+      outline: none;
+    }
+
+    .input-group-name:focus {
+      border-color: #a78bfa;
+    }
+
+    .payment-select-group {
+      background: #090e17;
+      border: 1px solid #4338ca;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 8px;
+      outline: none;
+    }
+
+    .floating-confirm-btn {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 800;
+      padding: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);
+    }
+
+    .floating-confirm-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Onglet 3: Export & Partage */
     .export-panel {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -755,7 +812,6 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Raccourci Undo flottant */
     .undo-bar {
       display: flex;
       justify-content: space-between;
@@ -782,7 +838,7 @@
         color: #000;
         padding: 0;
       }
-      .top-bar, .tabs-nav, .quick-panel, .group-panel, .export-panel, .undo-bar, .toast-save, .btn-delete-row {
+      .top-bar, .tabs-nav, .quick-panel, .export-panel, .undo-bar, .toast-save, .btn-delete-row, .floating-group-bar, .btn-create-group-mode, .group-checkbox {
         display: none !important;
       }
       .tab-content {
@@ -861,16 +917,13 @@
     <!-- Navigation onglets Mobile First -->
     <nav class="tabs-nav">
       <button class="tab-btn active" id="tab-btn-quick" onclick="switchTab('quick')">
-        ⚡ 1-Clic
-      </button>
-      <button class="tab-btn" id="tab-btn-group" onclick="switchTab('group')">
-        👥 Groupe
+        ⚡ 1-Clic Accueil
       </button>
       <button class="tab-btn" id="tab-btn-list" onclick="switchTab('list')">
-        📋 Liste (<span id="nav-count">0</span>)
+        📋 Registre & Groupes (<span id="nav-count">0</span>)
       </button>
       <button class="tab-btn" id="tab-btn-export" onclick="switchTab('export')">
-        📊 Bilan
+        📊 Bilan & Export
       </button>
     </nav>
 
@@ -913,73 +966,26 @@
       </div>
     </div>
 
-    <!-- ONGLET 2 : CRÉATION DE GROUPE -->
-    <div class="tab-content" id="tab-group">
-      <div class="group-panel">
-        <div class="group-header">
-          <span>👥 Enregistrer un Groupe</span>
-        </div>
-
-        <div>
-          <label class="stepper-label">Nom ou Référent du Groupe :</label>
-          <input type="text" id="group-name" class="text-input" style="margin-top: 6px;" placeholder="Ex: Groupe Karim, Table VIP 4, Famille Ben...">
-        </div>
-
-        <div>
-          <label class="stepper-label">Nombre de personnes :</label>
-          <div class="stepper-container" style="margin-top: 6px;">
-            <button class="stepper-btn" onclick="changeGroupQty(-1)">−</button>
-            <div class="stepper-display">
-              <span class="stepper-count" id="group-qty-display">4</span>
-              <span class="stepper-sub">personnes</span>
-            </div>
-            <button class="stepper-btn" onclick="changeGroupQty(1)">+</button>
-          </div>
-        </div>
-
-        <!-- Raccourcis rapides de taille de groupe -->
-        <div class="quick-pill-row">
-          <button class="pill-btn" onclick="setGroupQty(2)">2 pers.</button>
-          <button class="pill-btn" onclick="setGroupQty(3)">3 pers.</button>
-          <button class="pill-btn active" onclick="setGroupQty(4)">4 pers.</button>
-          <button class="pill-btn" onclick="setGroupQty(5)">5 pers.</button>
-          <button class="pill-btn" onclick="setGroupQty(6)">6 pers.</button>
-          <button class="pill-btn" onclick="setGroupQty(8)">8 pers.</button>
-          <button class="pill-btn" onclick="setGroupQty(10)">10 pers.</button>
-        </div>
-
-        <div class="group-total-recap">
-          <div class="group-total-text">
-            Total pour le groupe :<br>
-            <small style="color: var(--text-dim);"><span id="group-calc-text">4 places × 15€</span></small>
-          </div>
-          <div class="group-total-amount" id="group-total-amount">60 €</div>
-        </div>
-
-        <div class="group-actions">
-          <button class="btn-group-submit btn-group-cb" onclick="submitGroup('CB')">
-            <span>💳 TOUT PAYÉ CB</span>
-            <small style="opacity: 0.85;">Pointer le groupe</small>
-          </button>
-
-          <button class="btn-group-submit btn-group-esp" onclick="submitGroup('ESP')">
-            <span>💵 TOUT PAYÉ ESPÈCES</span>
-            <small style="opacity: 0.85;">Pointer le groupe</small>
-          </button>
-
-          <button class="btn-group-submit btn-group-unpaid" onclick="submitGroup('NON_PAYE')">
-            <span>⚠️ GROUPE NON PAYÉ (À RÉGLER SUR PLACE)</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ONGLET 3 : LISTE COMPLÈTE & ÉDITION -->
+    <!-- ONGLET 2 : VUE LISTE AVEC CRÉATION DE GROUPE PAR SÉLECTION -->
     <div class="tab-content" id="tab-list">
       <div class="list-panel">
         <div class="list-header-bar">
-          <span style="font-size: 0.85rem; font-weight: 700;">Registre (<span id="table-total-count">0</span>)</span>
-          <input type="text" id="filter-search" class="search-input" placeholder="🔍 Filtrer..." oninput="renderEntriesList()">
+          <div class="list-header-top">
+            <button class="btn-create-group-mode" id="btn-group-mode-toggle" onclick="toggleGroupSelectionMode()">
+              <span>👥 Créer un Groupe</span>
+            </button>
+            <input type="text" id="filter-search" class="search-input" placeholder="🔍 Filtrer..." oninput="renderEntriesList()">
+          </div>
+
+          <!-- Bandeau actif uniquement en mode sélection -->
+          <div id="selection-banner" class="selection-banner" style="display: none;">
+            <span>Sélectionnez les lignes à regrouper</span>
+            <div>
+              <button onclick="selectAllVisible()">Tout</button>
+              <span style="opacity: 0.5;"> | </span>
+              <button onclick="clearSelection()">Aucun</button>
+            </div>
+          </div>
         </div>
 
         <div class="entries-container" id="entries-list">
@@ -988,7 +994,7 @@
       </div>
     </div>
 
-    <!-- ONGLET 4 : EXPORT & SÉCURITÉ -->
+    <!-- ONGLET 3 : EXPORT & SÉCURITÉ -->
     <div class="tab-content" id="tab-export">
       <div class="export-panel">
         <div class="export-title">📤 Exporter les Données & Sauvegardes</div>
@@ -1031,6 +1037,33 @@
     </div>
   </div>
 
+  <!-- BARRE FLOTTANTE DE CONFIRMATION DU GROUPE (FIXÉE EN BAS DU MOBILE) -->
+  <div class="floating-group-bar" id="floating-group-bar">
+    <div class="floating-top-row">
+      <div class="floating-title">
+        <span>👥 Nouveau Groupe</span>
+        <span class="floating-badge" id="floating-selected-count">0 sélectionnés</span>
+      </div>
+      <button onclick="toggleGroupSelectionMode()" style="background: none; border: none; color: #94a3b8; font-size: 0.8rem; cursor: pointer;">
+        ✕ Annuler
+      </button>
+    </div>
+
+    <div class="floating-inputs-row">
+      <input type="text" id="floating-group-name" class="input-group-name" placeholder="Nom du groupe (ex: Table Karim, Famille Ben...)">
+      <select id="floating-group-payment" class="payment-select-group">
+        <option value="KEEP">Garder paiements</option>
+        <option value="CB">💳 Tout en CB</option>
+        <option value="ESP">💵 Tout en ESP</option>
+        <option value="NON_PAYE">⚠️ Tout en Dû</option>
+      </select>
+    </div>
+
+    <button class="floating-confirm-btn" onclick="confirmSelectedGroup()">
+      <span>✓ Confirmer et Créer le Groupe</span>
+    </button>
+  </div>
+
   <!-- Toast de sauvegarde discrète -->
   <div class="toast-save" id="toast-save">
     <span>✓</span>
@@ -1050,9 +1083,9 @@
     document.getElementById('ticket-price').value = currentPrice;
 
     let entries = [];
-    let groupQty = 4;
+    let isSelectionMode = false;
+    let selectedIds = new Set();
 
-    // Charger les données dès l'ouverture
     initApp();
 
     function initApp() {
@@ -1061,7 +1094,6 @@
         if (raw) {
           entries = JSON.parse(raw);
         } else {
-          // Essai de backup si clé principale vide
           const backup = localStorage.getItem(BACKUP_KEY);
           if (backup) {
             entries = JSON.parse(backup);
@@ -1073,15 +1105,13 @@
       }
 
       updateAllUI();
-      updateGroupRecap();
     }
 
-    // Sauvegarde immédiate et miroir de secours
     function persistData() {
       try {
         const json = JSON.stringify(entries);
         localStorage.setItem(STORAGE_KEY, json);
-        localStorage.setItem(BACKUP_KEY, json); // Double sauvegarde miroir
+        localStorage.setItem(BACKUP_KEY, json);
         showToast(`✓ Sauvegardé (${entries.length} entrées)`);
       } catch (e) {
         console.error("Erreur écriture storage", e);
@@ -1103,7 +1133,6 @@
     function setGlobalPrice(val) {
       currentPrice = parseFloat(val) || 0;
       localStorage.setItem(PRICE_KEY, currentPrice);
-      updateGroupRecap();
       updateAllUI();
     }
 
@@ -1120,14 +1149,15 @@
       const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 
       const newEntry = {
-        id: Date.now() + Math.random(),
+        id: 'entry_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
         num: entries.length + 1,
         time: timeStr,
         name: note || 'Personne',
         paymentType: paymentType, // 'CB', 'ESP', 'NON_PAYE'
         isPaid: paymentType !== 'NON_PAYE',
         amount: currentPrice,
-        isGroup: false
+        groupId: null,
+        groupName: null
       };
 
       entries.push(newEntry);
@@ -1138,64 +1168,167 @@
     }
 
     /* ========================================================
-       AJOUT DE GROUPE (TABLES, GROUPES D'AMIS)
+       CRÉATION DE GROUPE DEPUIS LA LISTE (SÉLECTION DE LIGNES)
        ======================================================== */
-    function changeGroupQty(delta) {
-      groupQty = Math.max(1, groupQty + delta);
-      updateGroupRecap();
-    }
-
-    function setGroupQty(val) {
-      groupQty = val;
-      updateGroupRecap();
-    }
-
-    function updateGroupRecap() {
-      document.getElementById('group-qty-display').textContent = groupQty;
-      const totalAmount = groupQty * currentPrice;
-      document.getElementById('group-calc-text').textContent = `${groupQty} places × ${currentPrice}€`;
-      document.getElementById('group-total-amount').textContent = `${totalAmount} €`;
-
-      // Mettre à jour l'état visuel des pilules
-      document.querySelectorAll('.pill-btn').forEach(btn => {
-        btn.classList.toggle('active', parseInt(btn.textContent) === groupQty);
-      });
-    }
-
-    function submitGroup(paymentType) {
+    function toggleGroupSelectionMode() {
       triggerHaptic();
-      const groupNameInput = document.getElementById('group-name');
-      const baseName = groupNameInput.value.trim() || 'Groupe';
-      groupNameInput.value = '';
+      isSelectionMode = !isSelectionMode;
+      selectedIds.clear();
 
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-      const groupId = 'grp_' + Date.now();
+      const toggleBtn = document.getElementById('btn-group-mode-toggle');
+      const banner = document.getElementById('selection-banner');
+      const floatingBar = document.getElementById('floating-group-bar');
 
-      for (let i = 1; i <= groupQty; i++) {
-        entries.push({
-          id: Date.now() + Math.random() + i,
-          num: entries.length + 1,
-          time: timeStr,
-          name: `${baseName} (${i}/${groupQty})`,
-          paymentType: paymentType,
-          isPaid: paymentType !== 'NON_PAYE',
-          amount: currentPrice,
-          groupId: groupId,
-          groupName: baseName,
-          isGroup: true
-        });
+      if (isSelectionMode) {
+        toggleBtn.classList.add('active-mode');
+        toggleBtn.innerHTML = '<span>✕ Annuler</span>';
+        banner.style.display = 'flex';
+      } else {
+        toggleBtn.classList.remove('active-mode');
+        toggleBtn.innerHTML = '<span>👥 Créer un Groupe</span>';
+        banner.style.display = 'none';
+        floatingBar.classList.remove('active');
       }
 
+      renderEntriesList();
+    }
+
+    function toggleRowSelection(id) {
+      if (!isSelectionMode) return;
+      triggerHaptic();
+
+      if (selectedIds.has(id)) {
+        selectedIds.delete(id);
+      } else {
+        selectedIds.add(id);
+      }
+
+      updateFloatingBar();
+      renderEntriesList();
+    }
+
+    function selectAllVisible() {
+      const filter = (document.getElementById('filter-search')?.value || '').toLowerCase();
+      entries.forEach(it => {
+        if (!filter || it.num.toString().includes(filter) || it.name.toLowerCase().includes(filter)) {
+          selectedIds.add(it.id);
+        }
+      });
+      updateFloatingBar();
+      renderEntriesList();
+    }
+
+    function clearSelection() {
+      selectedIds.clear();
+      updateFloatingBar();
+      renderEntriesList();
+    }
+
+    function updateFloatingBar() {
+      const floatingBar = document.getElementById('floating-group-bar');
+      const countEl = document.getElementById('floating-selected-count');
+
+      if (isSelectionMode && selectedIds.size > 0) {
+        floatingBar.classList.add('active');
+        countEl.textContent = `${selectedIds.size} sélectionné${selectedIds.size > 1 ? 's' : ''}`;
+      } else {
+        floatingBar.classList.remove('active');
+      }
+    }
+
+    function confirmSelectedGroup() {
+      if (selectedIds.size === 0) {
+        alert("Veuillez sélectionner au moins 1 personne pour créer un groupe.");
+        return;
+      }
+
+      triggerHaptic();
+      const inputName = document.getElementById('floating-group-name');
+      const groupName = inputName.value.trim() || 'Groupe';
+      inputName.value = '';
+
+      const paymentRule = document.getElementById('floating-group-payment').value;
+      const groupId = 'grp_' + Date.now();
+
+      // Trouver toutes les entrées sélectionnées et les lier au groupe
+      const selectedEntries = entries.filter(it => selectedIds.has(it.id));
+      const totalInGroup = selectedEntries.length;
+
+      let counter = 1;
+      entries.forEach(it => {
+        if (selectedIds.has(it.id)) {
+          it.groupId = groupId;
+          it.groupName = groupName;
+          it.name = `${groupName} (${counter}/${totalInGroup})`;
+          counter++;
+
+          if (paymentRule === 'CB') {
+            it.paymentType = 'CB';
+            it.isPaid = true;
+          } else if (paymentRule === 'ESP') {
+            it.paymentType = 'ESP';
+            it.isPaid = true;
+          } else if (paymentRule === 'NON_PAYE') {
+            it.paymentType = 'NON_PAYE';
+            it.isPaid = false;
+          }
+        }
+      });
+
+      // Désactiver le mode sélection
+      isSelectionMode = false;
+      selectedIds.clear();
+
+      const toggleBtn = document.getElementById('btn-group-mode-toggle');
+      toggleBtn.classList.remove('active-mode');
+      toggleBtn.innerHTML = '<span>👥 Créer un Groupe</span>';
+      document.getElementById('selection-banner').style.display = 'none';
+      document.getElementById('floating-group-bar').classList.remove('active');
+
       persistData();
-      switchTab('list'); // Basculer sur la liste pour voir le groupe ajouté
-      document.getElementById('last-action-msg').textContent = `Groupe ajouté : ${groupQty} personnes`;
+      showToast(`Groupe "${groupName}" créé (${totalInGroup} personnes) !`);
+    }
+
+    /* Gérer un groupe déjà existant : Dissocier ou Renommer */
+    function manageExistingGroup(groupId) {
+      const groupItems = entries.filter(it => it.groupId === groupId);
+      if (groupItems.length === 0) return;
+      const groupName = groupItems[0].groupName || 'Groupe';
+
+      const action = prompt(`GROUPE : "${groupName}" (${groupItems.length} personnes)\n\nTapez:\n1 pour Renommer le groupe\n2 pour Passer TOUT le groupe en CB\n3 pour Passer TOUT le groupe en ESP\n4 pour DISSOCIER / ANNULER le groupe`, "1");
+
+      if (action === "1") {
+        const newName = prompt("Nouveau nom pour ce groupe :", groupName);
+        if (newName && newName.trim()) {
+          groupItems.forEach((it, idx) => {
+            it.groupName = newName.trim();
+            it.name = `${newName.trim()} (${idx + 1}/${groupItems.length})`;
+          });
+          persistData();
+        }
+      } else if (action === "2") {
+        groupItems.forEach(it => { it.paymentType = 'CB'; it.isPaid = true; });
+        persistData();
+      } else if (action === "3") {
+        groupItems.forEach(it => { it.paymentType = 'ESP'; it.isPaid = true; });
+        persistData();
+      } else if (action === "4") {
+        if (confirm(`Dissocier le groupe "${groupName}" ? Les personnes resteront pointées individuellement.`)) {
+          groupItems.forEach(it => {
+            it.groupId = null;
+            it.groupName = null;
+            it.name = it.name.replace(/\s\(\d+\/\d+\)/, '');
+          });
+          persistData();
+        }
+      }
     }
 
     /* ========================================================
        CHANGEMENT D'ÉTAT & ÉDITION DANS LE TABLEAU
        ======================================================== */
-    function toggleStatus(index) {
+    function toggleStatus(index, event) {
+      if (event) event.stopPropagation();
       triggerHaptic();
       const item = entries[index];
       if (item.paymentType === 'CB') {
@@ -1211,7 +1344,8 @@
       persistData();
     }
 
-    function editEntryName(index) {
+    function editEntryName(index, event) {
+      if (event) event.stopPropagation();
       const item = entries[index];
       const newName = prompt(`Modifier le nom pour l'entrée N° ${item.num} :`, item.name);
       if (newName !== null) {
@@ -1220,7 +1354,8 @@
       }
     }
 
-    function editEntryAmount(index) {
+    function editEntryAmount(index, event) {
+      if (event) event.stopPropagation();
       const item = entries[index];
       const newAmt = prompt(`Montant pour l'entrée N° ${item.num} (€) :`, item.amount);
       if (newAmt !== null) {
@@ -1229,10 +1364,10 @@
       }
     }
 
-    function deleteEntry(index) {
+    function deleteEntry(index, event) {
+      if (event) event.stopPropagation();
       if (confirm(`Supprimer l'entrée N° ${entries[index].num} ?`)) {
         entries.splice(index, 1);
-        // Réindexation propre
         entries.forEach((it, idx) => it.num = idx + 1);
         persistData();
       }
@@ -1250,7 +1385,6 @@
       if (entries.length === 0) return;
       const rep = confirm("Attention : Voulez-vous vraiment clore ce spectacle et remettre le compteur à zéro ?\n(Pensez à exporter en Excel avant si nécessaire)");
       if (rep) {
-        // Garder une archive dans une clé datée
         const archiveKey = 'archive_spectacle_' + new Date().toISOString();
         localStorage.setItem(archiveKey, JSON.stringify(entries));
         entries = [];
@@ -1264,7 +1398,6 @@
        AFFICHAGE ET CALCULS EN TEMPS RÉEL
        ======================================================== */
     function updateAllUI() {
-      // 1. Calculs des totaux
       const total = entries.length;
       let cbCount = 0, espCount = 0, unpaidCount = 0;
       let cbAmt = 0, espAmt = 0, unpaidAmt = 0;
@@ -1292,7 +1425,6 @@
       document.getElementById('stat-amt-unpaid').textContent = `${unpaidAmt.toFixed(0)}€`;
 
       document.getElementById('nav-count').textContent = total;
-      document.getElementById('table-total-count').textContent = total;
       document.getElementById('storage-count').textContent = `(${total})`;
 
       renderEntriesList();
@@ -1302,30 +1434,34 @@
       const container = document.getElementById('entries-list');
       const filter = (document.getElementById('filter-search')?.value || '').toLowerCase();
 
+      container.className = 'entries-container' + (isSelectionMode ? ' selection-active' : '');
       container.innerHTML = '';
 
       if (entries.length === 0) {
         container.innerHTML = `
           <div style="padding: 30px 14px; text-align: center; color: var(--text-dim); font-size: 0.88rem;">
-            Aucune entrée pour l'instant.<br>Utilisez l'onglet <strong>⚡ 1-Clic</strong> ou <strong>👥 Groupe</strong> pour démarrer.
+            Aucune entrée pour l'instant.<br>Utilisez l'onglet <strong>⚡ 1-Clic Accueil</strong> pour démarrer.
           </div>
         `;
         return;
       }
 
-      // Du plus récent au plus ancien pour voir immédiatement les arrivants
       const filtered = entries.map((item, originalIndex) => ({ ...item, originalIndex }))
         .filter(item => {
           if (!filter) return true;
           return item.num.toString().includes(filter) ||
                  item.name.toLowerCase().includes(filter) ||
+                 (item.groupName && item.groupName.toLowerCase().includes(filter)) ||
                  item.paymentType.toLowerCase().includes(filter);
         })
         .reverse();
 
       filtered.forEach(item => {
         const row = document.createElement('div');
-        row.className = 'entry-row';
+        const isSelected = selectedIds.has(item.id);
+        row.className = 'entry-row' +
+                        (isSelected ? ' selected' : '') +
+                        (item.groupId ? ' is-group-member' : '');
 
         let badgeClass = 'entry-badge-unpaid';
         let badgeText = '⚠️ DÛ / NON PAYÉ';
@@ -1338,26 +1474,35 @@
           badgeText = '💵 PAYÉ ESP';
         }
 
+        row.onclick = () => {
+          if (isSelectionMode) {
+            toggleRowSelection(item.id);
+          }
+        };
+
         row.innerHTML = `
           <div class="entry-left">
+            <div class="group-checkbox">
+              ${isSelected ? '✓' : ''}
+            </div>
             <span class="entry-num">${item.num}</span>
             <div class="entry-info">
-              <span class="entry-name" onclick="editEntryName(${item.originalIndex})">${escapeHtml(item.name)}</span>
+              <span class="entry-name" onclick="if(!isSelectionMode) editEntryName(${item.originalIndex}, event)">${escapeHtml(item.name)}</span>
               <span class="entry-sub">
                 <span>🕒 ${item.time}</span>
-                ${item.isGroup ? '<span style="color: #818cf8;">👥 Groupe</span>' : ''}
+                ${item.groupId ? `<span class="badge-group-tag" onclick="if(!isSelectionMode){ event.stopPropagation(); manageExistingGroup('${item.groupId}'); }" title="Toucher pour gérer le groupe">👥 ${escapeHtml(item.groupName || 'Groupe')}</span>` : ''}
               </span>
             </div>
           </div>
 
           <div class="entry-right">
-            <span class="entry-badge ${badgeClass}" onclick="toggleStatus(${item.originalIndex})" title="Toucher pour changer le paiement">
+            <span class="entry-badge ${badgeClass}" onclick="toggleStatus(${item.originalIndex}, event)" title="Toucher pour changer le paiement">
               ${badgeText}
             </span>
-            <span class="entry-amount" onclick="editEntryAmount(${item.originalIndex})">
+            <span class="entry-amount" onclick="editEntryAmount(${item.originalIndex}, event)">
               ${item.amount}€
             </span>
-            <button class="btn-delete-row" onclick="deleteEntry(${item.originalIndex})" title="Supprimer">✕</button>
+            ${!isSelectionMode ? `<button class="btn-delete-row" onclick="deleteEntry(${item.originalIndex}, event)" title="Supprimer">✕</button>` : ''}
           </div>
         `;
 
@@ -1393,13 +1538,14 @@
         return;
       }
 
-      let csv = "\uFEFF"; // UTF-8 BOM pour ouverture directe sans bug d'accents sur Excel
-      csv += "Numero;Heure;Nom / Note;Statut;Paiement;Montant (EUR)\n";
+      let csv = "\uFEFF";
+      csv += "Numero;Heure;Nom / Note;Groupe;Statut;Paiement;Montant (EUR)\n";
 
       entries.forEach(it => {
         const statut = it.isPaid ? "PAYE" : "NON PAYE";
         const cleanName = (it.name || '').replace(/;/g, ' ');
-        csv += `${it.num};"${it.time}";"${cleanName}";"${statut}";"${it.paymentType}";${it.amount}\n`;
+        const cleanGroup = (it.groupName || '').replace(/;/g, ' ');
+        csv += `${it.num};"${it.time}";"${cleanName}";"${cleanGroup}";"${statut}";"${it.paymentType}";${it.amount}\n`;
       });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -1463,7 +1609,6 @@
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
 
-    // Raccourcis clavier physiques
     document.addEventListener('keydown', (e) => {
       if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
       const k = e.key.toLowerCase();
