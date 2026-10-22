@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#090d16">
+  <title>Pointage Spectacle - Le Mood</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #121826;
+      --card-bg-elevated: #1a2234;
+      --card-border: #222d42;
+      --card-border-light: #2d3b55;
+      --primary: #6366f1;
+      --cb: #0284c7;
+      --cb-hover: #0369a1;
+      --cb-glow: rgba(2, 132, 199, 0.25);
+      --esp: #10b981;
+      --esp-hover: #059669;
+      --esp-glow: rgba(16, 185, 129, 0.25);
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --danger-glow: rgba(239, 68, 68, 0.25);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --safe-bottom: env(safe-area-inset-bottom, 12px);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 10px 12px calc(80px + var(--safe-bottom)) 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overscroll-behavior-y: none;
+    }
+
+    .app-wrapper {
+      width: 100%;
+      max-width: 580px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* En-tête mobile compacte avec badge de sauvegarde permanente */
+    .top-bar {
+      background: linear-gradient(135deg, #131a29, #0c111c);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse-dot 1.5s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .save-status {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-export-quick {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      border: 1px solid #6366f1;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+    }
+
+    .btn-export-quick:active {
+      transform: scale(0.96);
+    }
+
+    /* Compteurs / Stats essentiels pour la caisse */
+    .stats-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-box {
+      background: #0d131f;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-box::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+    }
+
+    .stat-box.total::after { background: var(--primary); }
+    .stat-box.cb::after { background: var(--cb); }
+    .stat-box.esp::after { background: var(--esp); }
+    .stat-box.unpaid::after { background: var(--danger); }
+
+    .stat-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .stat-num-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .stat-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.55rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .stat-currency {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* Barre d'onglets mobile */
+    .tabs-nav {
+      display: flex;
+      background: #0f1624;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 9px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--card-bg-elevated);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border: 1px solid var(--card-border-light);
+    }
+
+    /* Vues d'onglets */
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
+    /* Onglet 1: Pointage Rapide */
+    .quick-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .price-config-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0b101a;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .price-inline {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .price-field {
+      width: 50px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border-light);
+      border-radius: 6px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 3px 6px;
+      text-align: center;
+    }
+
+    /* Boutons de frappe géants spécial smartphone */
+    .big-buttons-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .action-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      transition: transform 0.08s ease, filter 0.08s ease;
+    }
+
+    .action-btn:active {
+      transform: scale(0.97);
+      filter: brightness(1.15);
+    }
+
+    .action-btn-cb {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      box-shadow: 0 6px 20px var(--cb-glow);
+    }
+
+    .action-btn-esp {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 6px 20px var(--esp-glow);
+    }
+
+    .action-btn-unpaid {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      box-shadow: 0 6px 20px var(--danger-glow);
+      padding: 14px 16px;
+      font-size: 1rem;
+    }
+
+    .btn-badge-label {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    /* Champ note rapide */
+    .quick-input-wrap {
+      display: flex;
+      gap: 8px;
+    }
+
+    .text-input {
+      width: 100%;
+      background: #0b101a;
+      border: 1px solid var(--card-border-light);
+      border-radius: 10px;
+      color: #fff;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--primary);
+    }
+
+    /* Onglet 2: Création de Groupes */
+    .group-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .group-header {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stepper-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Sélecteur de personnes pour groupe */
+    .stepper-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0c121d;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 8px 12px;
+    }
+
+    .stepper-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--card-bg-elevated);
+      border: 1px solid var(--card-border-light);
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .stepper-btn:active {
+      transform: scale(0.92);
+      background: #28354f;
+    }
+
+    .stepper-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stepper-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #38bdf8;
+      line-height: 1;
+    }
+
+    .stepper-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .quick-pill-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .pill-btn {
+      background: #141c2c;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .pill-btn.active, .pill-btn:active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .group-total-recap {
+      background: linear-gradient(135deg, #182338, #0e1624);
+      border: 1px solid #293856;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .group-total-text {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+
+    .group-total-amount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #10b981;
+    }
+
+    .group-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-group-submit {
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .btn-group-submit:active {
+      transform: scale(0.97);
+    }
+
+    .btn-group-cb { background: linear-gradient(135deg, #0284c7, #0369a1); }
+    .btn-group-esp { background: linear-gradient(135deg, #10b981, #059669); }
+    .btn-group-unpaid { background: #334155; grid-column: span 2; }
+
+    /* Onglet 3: Liste / Registre */
+    .list-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .list-header-bar {
+      padding: 12px 14px;
+      background: #151d2d;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-input {
+      background: #090e17;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      color: #fff;
+      font-size: 0.82rem;
+      width: 140px;
+      outline: none;
+    }
+
+    .entries-container {
+      display: flex;
+      flex-direction: column;
+      max-height: 520px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .entry-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 12px;
+      border-bottom: 1px solid #192233;
+      gap: 8px;
+    }
+
+    .entry-row:last-child {
+      border-bottom: none;
+    }
+
+    .entry-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .entry-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #38bdf8;
+      width: 32px;
+      flex-shrink: 0;
+    }
+
+    .entry-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .entry-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .entry-sub {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .entry-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .entry-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .entry-badge-cb {
+      background: rgba(2, 132, 199, 0.2);
+      color: #38bdf8;
+      border: 1px solid rgba(2, 132, 199, 0.4);
+    }
+
+    .entry-badge-esp {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .entry-badge-unpaid {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .entry-amount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      width: 45px;
+      text-align: right;
+    }
+
+    .btn-delete-row {
+      background: transparent;
+      border: none;
+      color: #475569;
+      font-size: 1.1rem;
+      padding: 4px;
+      cursor: pointer;
+    }
+
+    .btn-delete-row:hover {
+      color: var(--danger);
+    }
+
+    /* Onglet 4: Export & Partage */
+    .export-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .export-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .export-card-action {
+      background: #0f1624;
+      border: 1px solid var(--card-border-light);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .export-card-action:active {
+      background: #1e293f;
+      transform: scale(0.99);
+    }
+
+    .export-action-icon {
+      font-size: 1.8rem;
+    }
+
+    .export-action-texts {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .export-action-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .export-action-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .btn-action-pill {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+
+    /* Toast notification de sauvegarde */
+    .toast-save {
+      position: fixed;
+      bottom: calc(14px + var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      border: 1px solid #22c55e;
+      color: #22c55e;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .toast-save.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Raccourci Undo flottant */
+    .undo-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      padding: 2px 4px;
+    }
+
+    .undo-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: #fff;
+        color: #000;
+        padding: 0;
+      }
+      .top-bar, .tabs-nav, .quick-panel, .group-panel, .export-panel, .undo-bar, .toast-save, .btn-delete-row {
+        display: none !important;
+      }
+      .tab-content {
+        display: block !important;
+      }
+      .list-panel, .stats-card {
+        border: 1px solid #000 !important;
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .stat-number, .entry-name, .entry-num, .entry-amount {
+        color: #000 !important;
+      }
+      .entries-container {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-wrapper">
+    <!-- Barre supérieure -->
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-title">
+          <span class="live-dot"></span>
+          <span>Le Mood Spectacle</span>
+        </div>
+        <div class="save-status">
+          <span>💾 Sauvegarde auto active</span>
+          <span id="storage-count">(0)</span>
+        </div>
+      </div>
+      <button class="btn-export-quick" onclick="switchTab('export')">
+        📤 Exporter
+      </button>
+    </header>
+
+    <!-- Tableau de bord Caisse / Stats immédiates -->
+    <div class="stats-card">
+      <div class="stat-box total">
+        <span class="stat-title">Total Entrées</span>
+        <div class="stat-num-row">
+          <span class="stat-number" id="stat-total">0</span>
+          <span class="stat-currency">pers.</span>
+        </div>
+      </div>
+
+      <div class="stat-box cb">
+        <span class="stat-title">Total CB</span>
+        <div class="stat-num-row">
+          <span class="stat-number" id="stat-cb">0</span>
+          <span class="stat-currency" id="stat-amt-cb">0€</span>
+        </div>
+      </div>
+
+      <div class="stat-box esp">
+        <span class="stat-title">Espèces En Caisse</span>
+        <div class="stat-num-row">
+          <span class="stat-number" id="stat-esp">0</span>
+          <span class="stat-currency" id="stat-amt-esp">0€</span>
+        </div>
+      </div>
+
+      <div class="stat-box unpaid">
+        <span class="stat-title">Non Payé / Dû</span>
+        <div class="stat-num-row">
+          <span class="stat-number" id="stat-unpaid">0</span>
+          <span class="stat-currency" id="stat-amt-unpaid">0€</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation onglets Mobile First -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" id="tab-btn-quick" onclick="switchTab('quick')">
+        ⚡ 1-Clic
+      </button>
+      <button class="tab-btn" id="tab-btn-group" onclick="switchTab('group')">
+        👥 Groupe
+      </button>
+      <button class="tab-btn" id="tab-btn-list" onclick="switchTab('list')">
+        📋 Liste (<span id="nav-count">0</span>)
+      </button>
+      <button class="tab-btn" id="tab-btn-export" onclick="switchTab('export')">
+        📊 Bilan
+      </button>
+    </nav>
+
+    <!-- ONGLET 1 : POINTAGE DIRECT (1 CLIC GÉANT) -->
+    <div class="tab-content active" id="tab-quick">
+      <div class="quick-panel">
+        <div class="price-config-bar">
+          <span>Tarif unitaire :</span>
+          <div class="price-inline">
+            <input type="number" id="ticket-price" class="price-field" value="15" min="0" onchange="setGlobalPrice(this.value)">
+            <span>€ / place</span>
+          </div>
+        </div>
+
+        <div class="quick-input-wrap">
+          <input type="text" id="quick-note" class="text-input" placeholder="Nom ou note (ex: Sarah, Table 3... optionnel)" onkeydown="if(event.key==='Enter') fastAdd('CB')">
+        </div>
+
+        <div class="big-buttons-col">
+          <button class="action-btn action-btn-cb" onclick="fastAdd('CB')">
+            <span>💳 OK PAYÉ CARTE (CB)</span>
+            <span class="btn-badge-label">+1</span>
+          </button>
+
+          <button class="action-btn action-btn-esp" onclick="fastAdd('ESP')">
+            <span>💵 OK PAYÉ ESPÈCES</span>
+            <span class="btn-badge-label">+1</span>
+          </button>
+
+          <button class="action-btn action-btn-unpaid" onclick="fastAdd('NON_PAYE')">
+            <span>⚠️ NON PAYÉ / À RÉGLER</span>
+            <span class="btn-badge-label">+1 dû</span>
+          </button>
+        </div>
+
+        <div class="undo-bar">
+          <span id="last-action-msg">Prêt pour les entrées</span>
+          <button class="undo-btn" onclick="undoLast()">Annuler la dernière</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ONGLET 2 : CRÉATION DE GROUPE -->
+    <div class="tab-content" id="tab-group">
+      <div class="group-panel">
+        <div class="group-header">
+          <span>👥 Enregistrer un Groupe</span>
+        </div>
+
+        <div>
+          <label class="stepper-label">Nom ou Référent du Groupe :</label>
+          <input type="text" id="group-name" class="text-input" style="margin-top: 6px;" placeholder="Ex: Groupe Karim, Table VIP 4, Famille Ben...">
+        </div>
+
+        <div>
+          <label class="stepper-label">Nombre de personnes :</label>
+          <div class="stepper-container" style="margin-top: 6px;">
+            <button class="stepper-btn" onclick="changeGroupQty(-1)">−</button>
+            <div class="stepper-display">
+              <span class="stepper-count" id="group-qty-display">4</span>
+              <span class="stepper-sub">personnes</span>
+            </div>
+            <button class="stepper-btn" onclick="changeGroupQty(1)">+</button>
+          </div>
+        </div>
+
+        <!-- Raccourcis rapides de taille de groupe -->
+        <div class="quick-pill-row">
+          <button class="pill-btn" onclick="setGroupQty(2)">2 pers.</button>
+          <button class="pill-btn" onclick="setGroupQty(3)">3 pers.</button>
+          <button class="pill-btn active" onclick="setGroupQty(4)">4 pers.</button>
+          <button class="pill-btn" onclick="setGroupQty(5)">5 pers.</button>
+          <button class="pill-btn" onclick="setGroupQty(6)">6 pers.</button>
+          <button class="pill-btn" onclick="setGroupQty(8)">8 pers.</button>
+          <button class="pill-btn" onclick="setGroupQty(10)">10 pers.</button>
+        </div>
+
+        <div class="group-total-recap">
+          <div class="group-total-text">
+            Total pour le groupe :<br>
+            <small style="color: var(--text-dim);"><span id="group-calc-text">4 places × 15€</span></small>
+          </div>
+          <div class="group-total-amount" id="group-total-amount">60 €</div>
+        </div>
+
+        <div class="group-actions">
+          <button class="btn-group-submit btn-group-cb" onclick="submitGroup('CB')">
+            <span>💳 TOUT PAYÉ CB</span>
+            <small style="opacity: 0.85;">Pointer le groupe</small>
+          </button>
+
+          <button class="btn-group-submit btn-group-esp" onclick="submitGroup('ESP')">
+            <span>💵 TOUT PAYÉ ESPÈCES</span>
+            <small style="opacity: 0.85;">Pointer le groupe</small>
+          </button>
+
+          <button class="btn-group-submit btn-group-unpaid" onclick="submitGroup('NON_PAYE')">
+            <span>⚠️ GROUPE NON PAYÉ (À RÉGLER SUR PLACE)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ONGLET 3 : LISTE COMPLÈTE & ÉDITION -->
+    <div class="tab-content" id="tab-list">
+      <div class="list-panel">
+        <div class="list-header-bar">
+          <span style="font-size: 0.85rem; font-weight: 700;">Registre (<span id="table-total-count">0</span>)</span>
+          <input type="text" id="filter-search" class="search-input" placeholder="🔍 Filtrer..." oninput="renderEntriesList()">
+        </div>
+
+        <div class="entries-container" id="entries-list">
+          <!-- Rempli en JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ONGLET 4 : EXPORT & SÉCURITÉ -->
+    <div class="tab-content" id="tab-export">
+      <div class="export-panel">
+        <div class="export-title">📤 Exporter les Données & Sauvegardes</div>
+
+        <div class="export-card-action" onclick="exportExcelCSV()">
+          <div class="export-action-icon">📊</div>
+          <div class="export-action-texts">
+            <div class="export-action-name">Télécharger pour Excel / Sheets</div>
+            <div class="export-action-desc">Fichier .CSV officiel avec numéro, heure, nom, mode de paiement et total.</div>
+          </div>
+          <button class="btn-action-pill">Télécharger</button>
+        </div>
+
+        <div class="export-card-action" onclick="shareSummaryWhatsApp()">
+          <div class="export-action-icon">📱</div>
+          <div class="export-action-texts">
+            <div class="export-action-name">Partager / WhatsApp / SMS</div>
+            <div class="export-action-desc">Envoie un bilan texte clair avec tous les totaux de la soirée.</div>
+          </div>
+          <button class="btn-action-pill" style="background: #22c55e;">Partager</button>
+        </div>
+
+        <div class="export-card-action" onclick="window.print()">
+          <div class="export-action-icon">🖨️</div>
+          <div class="export-action-texts">
+            <div class="export-action-name">Imprimer la feuille de caisse</div>
+            <div class="export-action-desc">Mise en page papier propre sans boutons, prête à signer.</div>
+          </div>
+          <button class="btn-action-pill" style="background: #0284c7;">Imprimer</button>
+        </div>
+
+        <div style="margin-top: 10px; padding: 12px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 10px;">
+          <div style="font-size: 0.82rem; font-weight: 700; color: #f87171; margin-bottom: 4px;">Zone Sécurisée : Réinitialiser</div>
+          <p style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 8px;">Pour démarrer un nouveau spectacle. Les données actuelles restent archivées en mémoire de secours.</p>
+          <button onclick="safeResetAll()" style="background: #ef4444; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+            🗑️ Démarrer un nouveau spectacle
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast de sauvegarde discrète -->
+  <div class="toast-save" id="toast-save">
+    <span>✓</span>
+    <span id="toast-msg">Sauvegardé en mémoire locale</span>
+  </div>
+
+  <script>
+    /* ========================================================
+       GESTION PERSISTANTE ULTRA-SÉCURISÉE (LOCALSTORAGE)
+       Survit aux rechargements, fermeture d'onglets, veille iPhone/Android
+       ======================================================== */
+    const STORAGE_KEY = 'spectacle_mood_live_v2';
+    const BACKUP_KEY = 'spectacle_mood_backup_v2';
+    const PRICE_KEY = 'spectacle_mood_price_v2';
+
+    let currentPrice = parseFloat(localStorage.getItem(PRICE_KEY)) || 15;
+    document.getElementById('ticket-price').value = currentPrice;
+
+    let entries = [];
+    let groupQty = 4;
+
+    // Charger les données dès l'ouverture
+    initApp();
+
+    function initApp() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          entries = JSON.parse(raw);
+        } else {
+          // Essai de backup si clé principale vide
+          const backup = localStorage.getItem(BACKUP_KEY);
+          if (backup) {
+            entries = JSON.parse(backup);
+          }
+        }
+      } catch (err) {
+        console.error("Erreur lecture storage", err);
+        entries = [];
+      }
+
+      updateAllUI();
+      updateGroupRecap();
+    }
+
+    // Sauvegarde immédiate et miroir de secours
+    function persistData() {
+      try {
+        const json = JSON.stringify(entries);
+        localStorage.setItem(STORAGE_KEY, json);
+        localStorage.setItem(BACKUP_KEY, json); // Double sauvegarde miroir
+        showToast(`✓ Sauvegardé (${entries.length} entrées)`);
+      } catch (e) {
+        console.error("Erreur écriture storage", e);
+      }
+      updateAllUI();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-save');
+      const text = document.getElementById('toast-msg');
+      text.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 1600);
+    }
+
+    function setGlobalPrice(val) {
+      currentPrice = parseFloat(val) || 0;
+      localStorage.setItem(PRICE_KEY, currentPrice);
+      updateGroupRecap();
+      updateAllUI();
+    }
+
+    /* ========================================================
+       AJOUT RAPIDE (1 CLIC ENTRÉE INDIVIDUELLE)
+       ======================================================== */
+    function fastAdd(paymentType) {
+      triggerHaptic();
+      const noteInput = document.getElementById('quick-note');
+      const note = noteInput.value.trim();
+      noteInput.value = '';
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+      const newEntry = {
+        id: Date.now() + Math.random(),
+        num: entries.length + 1,
+        time: timeStr,
+        name: note || 'Personne',
+        paymentType: paymentType, // 'CB', 'ESP', 'NON_PAYE'
+        isPaid: paymentType !== 'NON_PAYE',
+        amount: currentPrice,
+        isGroup: false
+      };
+
+      entries.push(newEntry);
+      persistData();
+
+      const paymentLabel = paymentType === 'CB' ? 'Carte' : paymentType === 'ESP' ? 'Espèces' : 'Non payé';
+      document.getElementById('last-action-msg').textContent = `Dernier : N°${newEntry.num} (${paymentLabel})`;
+    }
+
+    /* ========================================================
+       AJOUT DE GROUPE (TABLES, GROUPES D'AMIS)
+       ======================================================== */
+    function changeGroupQty(delta) {
+      groupQty = Math.max(1, groupQty + delta);
+      updateGroupRecap();
+    }
+
+    function setGroupQty(val) {
+      groupQty = val;
+      updateGroupRecap();
+    }
+
+    function updateGroupRecap() {
+      document.getElementById('group-qty-display').textContent = groupQty;
+      const totalAmount = groupQty * currentPrice;
+      document.getElementById('group-calc-text').textContent = `${groupQty} places × ${currentPrice}€`;
+      document.getElementById('group-total-amount').textContent = `${totalAmount} €`;
+
+      // Mettre à jour l'état visuel des pilules
+      document.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.textContent) === groupQty);
+      });
+    }
+
+    function submitGroup(paymentType) {
+      triggerHaptic();
+      const groupNameInput = document.getElementById('group-name');
+      const baseName = groupNameInput.value.trim() || 'Groupe';
+      groupNameInput.value = '';
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      const groupId = 'grp_' + Date.now();
+
+      for (let i = 1; i <= groupQty; i++) {
+        entries.push({
+          id: Date.now() + Math.random() + i,
+          num: entries.length + 1,
+          time: timeStr,
+          name: `${baseName} (${i}/${groupQty})`,
+          paymentType: paymentType,
+          isPaid: paymentType !== 'NON_PAYE',
+          amount: currentPrice,
+          groupId: groupId,
+          groupName: baseName,
+          isGroup: true
+        });
+      }
+
+      persistData();
+      switchTab('list'); // Basculer sur la liste pour voir le groupe ajouté
+      document.getElementById('last-action-msg').textContent = `Groupe ajouté : ${groupQty} personnes`;
+    }
+
+    /* ========================================================
+       CHANGEMENT D'ÉTAT & ÉDITION DANS LE TABLEAU
+       ======================================================== */
+    function toggleStatus(index) {
+      triggerHaptic();
+      const item = entries[index];
+      if (item.paymentType === 'CB') {
+        item.paymentType = 'ESP';
+        item.isPaid = true;
+      } else if (item.paymentType === 'ESP') {
+        item.paymentType = 'NON_PAYE';
+        item.isPaid = false;
+      } else {
+        item.paymentType = 'CB';
+        item.isPaid = true;
+      }
+      persistData();
+    }
+
+    function editEntryName(index) {
+      const item = entries[index];
+      const newName = prompt(`Modifier le nom pour l'entrée N° ${item.num} :`, item.name);
+      if (newName !== null) {
+        item.name = newName.trim() || 'Personne';
+        persistData();
+      }
+    }
+
+    function editEntryAmount(index) {
+      const item = entries[index];
+      const newAmt = prompt(`Montant pour l'entrée N° ${item.num} (€) :`, item.amount);
+      if (newAmt !== null) {
+        item.amount = parseFloat(newAmt) || 0;
+        persistData();
+      }
+    }
+
+    function deleteEntry(index) {
+      if (confirm(`Supprimer l'entrée N° ${entries[index].num} ?`)) {
+        entries.splice(index, 1);
+        // Réindexation propre
+        entries.forEach((it, idx) => it.num = idx + 1);
+        persistData();
+      }
+    }
+
+    function undoLast() {
+      if (entries.length > 0) {
+        const removed = entries.pop();
+        persistData();
+        document.getElementById('last-action-msg').textContent = `Annulé : N°${removed.num}`;
+      }
+    }
+
+    function safeResetAll() {
+      if (entries.length === 0) return;
+      const rep = confirm("Attention : Voulez-vous vraiment clore ce spectacle et remettre le compteur à zéro ?\n(Pensez à exporter en Excel avant si nécessaire)");
+      if (rep) {
+        // Garder une archive dans une clé datée
+        const archiveKey = 'archive_spectacle_' + new Date().toISOString();
+        localStorage.setItem(archiveKey, JSON.stringify(entries));
+        entries = [];
+        persistData();
+        switchTab('quick');
+        alert("Nouveau spectacle commencé ! Les données précédentes ont été archivées.");
+      }
+    }
+
+    /* ========================================================
+       AFFICHAGE ET CALCULS EN TEMPS RÉEL
+       ======================================================== */
+    function updateAllUI() {
+      // 1. Calculs des totaux
+      const total = entries.length;
+      let cbCount = 0, espCount = 0, unpaidCount = 0;
+      let cbAmt = 0, espAmt = 0, unpaidAmt = 0;
+
+      entries.forEach(it => {
+        const a = parseFloat(it.amount) || 0;
+        if (it.paymentType === 'CB') {
+          cbCount++;
+          cbAmt += a;
+        } else if (it.paymentType === 'ESP') {
+          espCount++;
+          espAmt += a;
+        } else {
+          unpaidCount++;
+          unpaidAmt += a;
+        }
+      });
+
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-cb').textContent = cbCount;
+      document.getElementById('stat-amt-cb').textContent = `${cbAmt.toFixed(0)}€`;
+      document.getElementById('stat-esp').textContent = espCount;
+      document.getElementById('stat-amt-esp').textContent = `${espAmt.toFixed(0)}€`;
+      document.getElementById('stat-unpaid').textContent = unpaidCount;
+      document.getElementById('stat-amt-unpaid').textContent = `${unpaidAmt.toFixed(0)}€`;
+
+      document.getElementById('nav-count').textContent = total;
+      document.getElementById('table-total-count').textContent = total;
+      document.getElementById('storage-count').textContent = `(${total})`;
+
+      renderEntriesList();
+    }
+
+    function renderEntriesList() {
+      const container = document.getElementById('entries-list');
+      const filter = (document.getElementById('filter-search')?.value || '').toLowerCase();
+
+      container.innerHTML = '';
+
+      if (entries.length === 0) {
+        container.innerHTML = `
+          <div style="padding: 30px 14px; text-align: center; color: var(--text-dim); font-size: 0.88rem;">
+            Aucune entrée pour l'instant.<br>Utilisez l'onglet <strong>⚡ 1-Clic</strong> ou <strong>👥 Groupe</strong> pour démarrer.
+          </div>
+        `;
+        return;
+      }
+
+      // Du plus récent au plus ancien pour voir immédiatement les arrivants
+      const filtered = entries.map((item, originalIndex) => ({ ...item, originalIndex }))
+        .filter(item => {
+          if (!filter) return true;
+          return item.num.toString().includes(filter) ||
+                 item.name.toLowerCase().includes(filter) ||
+                 item.paymentType.toLowerCase().includes(filter);
+        })
+        .reverse();
+
+      filtered.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'entry-row';
+
+        let badgeClass = 'entry-badge-unpaid';
+        let badgeText = '⚠️ DÛ / NON PAYÉ';
+
+        if (item.paymentType === 'CB') {
+          badgeClass = 'entry-badge-cb';
+          badgeText = '💳 PAYÉ CB';
+        } else if (item.paymentType === 'ESP') {
+          badgeClass = 'entry-badge-esp';
+          badgeText = '💵 PAYÉ ESP';
+        }
+
+        row.innerHTML = `
+          <div class="entry-left">
+            <span class="entry-num">${item.num}</span>
+            <div class="entry-info">
+              <span class="entry-name" onclick="editEntryName(${item.originalIndex})">${escapeHtml(item.name)}</span>
+              <span class="entry-sub">
+                <span>🕒 ${item.time}</span>
+                ${item.isGroup ? '<span style="color: #818cf8;">👥 Groupe</span>' : ''}
+              </span>
+            </div>
+          </div>
+
+          <div class="entry-right">
+            <span class="entry-badge ${badgeClass}" onclick="toggleStatus(${item.originalIndex})" title="Toucher pour changer le paiement">
+              ${badgeText}
+            </span>
+            <span class="entry-amount" onclick="editEntryAmount(${item.originalIndex})">
+              ${item.amount}€
+            </span>
+            <button class="btn-delete-row" onclick="deleteEntry(${item.originalIndex})" title="Supprimer">✕</button>
+          </div>
+        `;
+
+        container.appendChild(row);
+      });
+    }
+
+    /* ========================================================
+       ONGLETS & NAVIGATION
+       ======================================================== */
+    function switchTab(tabName) {
+      triggerHaptic();
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+      const targetContent = document.getElementById(`tab-${tabName}`);
+      const targetBtn = document.getElementById(`tab-btn-${tabName}`);
+
+      if (targetContent) targetContent.classList.add('active');
+      if (targetBtn) targetBtn.classList.add('active');
+
+      if (tabName === 'list') {
+        renderEntriesList();
+      }
+    }
+
+    /* ========================================================
+       OPTIONS D'EXPORTATION CLAIRES
+       ======================================================== */
+    function exportExcelCSV() {
+      if (entries.length === 0) {
+        alert("Aucune entrée enregistrée à exporter.");
+        return;
+      }
+
+      let csv = "\uFEFF"; // UTF-8 BOM pour ouverture directe sans bug d'accents sur Excel
+      csv += "Numero;Heure;Nom / Note;Statut;Paiement;Montant (EUR)\n";
+
+      entries.forEach(it => {
+        const statut = it.isPaid ? "PAYE" : "NON PAYE";
+        const cleanName = (it.name || '').replace(/;/g, ' ');
+        csv += `${it.num};"${it.time}";"${cleanName}";"${statut}";"${it.paymentType}";${it.amount}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const dateStr = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `Le_Mood_Spectacle_${dateStr}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast("Fichier Excel .CSV téléchargé !");
+    }
+
+    function shareSummaryWhatsApp() {
+      const total = entries.length;
+      let cbCount = 0, espCount = 0, unpaidCount = 0;
+      let cbAmt = 0, espAmt = 0, unpaidAmt = 0;
+
+      entries.forEach(it => {
+        const a = parseFloat(it.amount) || 0;
+        if (it.paymentType === 'CB') { cbCount++; cbAmt += a; }
+        else if (it.paymentType === 'ESP') { espCount++; espAmt += a; }
+        else { unpaidCount++; unpaidAmt += a; }
+      });
+
+      const dateStr = new Date().toLocaleDateString('fr-FR');
+      const text = `🎭 *BILAN SPECTACLE LE MOOD (${dateStr})*\n\n` +
+                   `🎟️ *Total Entrées :* ${total} personnes\n` +
+                   `💳 *CB :* ${cbCount} entrées (${cbAmt} €)\n` +
+                   `💵 *Espèces :* ${espCount} entrées (${espAmt} €)\n` +
+                   `⚠️ *Dû / Non payé :* ${unpaidCount} entrées (${unpaidAmt} €)\n\n` +
+                   `💰 *Total Recette Réalisée :* ${cbAmt + espAmt} €`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: "Bilan Entrées Spectacle",
+          text: text
+        }).catch(() => copyToClipboard(text));
+      } else {
+        copyToClipboard(text);
+      }
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Bilan copié dans le presse-papier ! Vous pouvez le coller dans WhatsApp ou par SMS :\n\n" + text);
+      }).catch(() => {
+        prompt("Copiez le bilan ci-dessous :", text);
+      });
+    }
+
+    function triggerHaptic() {
+      if (navigator.vibrate) {
+        try { navigator.vibrate(15); } catch(e) {}
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    // Raccourcis clavier physiques
+    document.addEventListener('keydown', (e) => {
+      if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      const k = e.key.toLowerCase();
+      if (k === 'c') fastAdd('CB');
+      if (k === 'e') fastAdd('ESP');
+      if (k === 'n') fastAdd('NON_PAYE');
+      if (k === 'z') undoLast();
+    });
+  </script>
+</body>
+</html>
